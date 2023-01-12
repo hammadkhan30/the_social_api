@@ -1,10 +1,11 @@
 const express = require("express");
 const dotenv = require("dotenv")
 const mongoose = require("mongoose");
-const 
 
 
-const app = express();
+const controller = require("./controller/authentication.js")
+
+const app = express(express.json());
 const port = process.env.PORT || 3000;
 
 dotenv.config();
@@ -14,9 +15,14 @@ mongoose.connect("process.env.mongo_connection", {useNewUrlParser : true}, ()=>{
 })
 
 app.get("/", (_req,res)=>{
-    res.send("Welcome");
+    res.json({message : 'welcome'});
 })
 
-app.listen(port, ()=>{
+app.use("/user",controller);
+
+app.listen(port, (err)=>{
+    if (err) {
+        console.log(err);
+    }
     console.log(`Server up and running ${port}`);
 })

@@ -1,9 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const User = require("./models/user");
+const router = express.Router();
 
 
-app.post("/signup", (req,res)=>{
+router.post("/signup", (req,res)=>{
     const NewUser = new User({
         name : req.body.name,
         email : req.body.email,
@@ -18,4 +19,4 @@ app.post("/signup", (req,res)=>{
     })
 })
 
-module.exports = router;
+module.exports = app;

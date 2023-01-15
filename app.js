@@ -1,24 +1,37 @@
 const express = require("express");
-const dotenv = require("dotenv")
+require("dotenv").config();
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser")
 
 
-const controller = require("./controller/authentication.js")
+const cont = require("./controller/authentication.js")
 
 const app = express(express.json());
 const port = process.env.PORT || 3000;
 
-dotenv.config();
+//dotenv.config();
 
-mongoose.connect("process.env.mongo_connection", {useNewUrlParser : true}, ()=>{
-    console.log("Database connected");
+mongoose.connect(process.env.mongo,
+ { 
+     useNewUrlParser: true,
+     //useUnifiedTopology: true, 
 })
+.then(() => {
+    console.log('Connected to MongoDB')
+})
+.catch((err) => {
+    console.log('Failed to connect to MongoDB', err)
+});
+
+
+app.use(bodyParser.urlencoded({extended : false}));
+app.use(bodyParser.json());
+
+app.use("/user",cont);
 
 app.get("/", (_req,res)=>{
     res.json({message : 'welcome'});
 })
-
-app.use("/user",controller);
 
 app.listen(port, (err)=>{
     if (err) {

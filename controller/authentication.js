@@ -1,5 +1,7 @@
 const express = require("express");
 const bodyparser = require("body-parser");
+const md5 = require("md5")
+
 const User = require("../models/user.js");
 const router = express.Router();
 
@@ -10,7 +12,7 @@ router
     const NewUser = new User({
         name : req.body.name,
         email : req.body.email,
-        password : req.body.password
+        password : md5(req.body.password)
     });
     NewUser.save((err)=>{
         if (err) {
@@ -20,8 +22,23 @@ router
         }
     })
 })
-.get("/signup", (req,res)=>{
-    res.json("message : chal raha hai ye to")
+router
+.post("/login", (req,res)=> {
+    const username = req.body.email;
+    const password = md5(req.body.password);
+
+    User.findOne({email : username}, (err, foundUser)=>{
+        if (err) {
+            res.json({message : "user not found"})
+        }else{
+            if (foundUser) {
+                if (foundUser.password == password) {
+                    res.json({message : "user found"})
+                }
+            }
+        }
+    })
 })
+
 
 module.exports = router;

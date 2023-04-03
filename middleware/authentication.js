@@ -9,8 +9,8 @@ const authMiddleware = async (req, res, next) => {
     const decodedToken = jwt.verify(token, jwtSecret);
     const user = await User.findById(decodedToken.userId);
 
-    console.log('Decoded Token:', decodedToken); // Add this line
-    console.log('User:', user); // Add this line
+    console.log('Decoded Token:', decodedToken); /
+    console.log('User:', user); 
 
     if (!user) {
       return res.status(401).json({ error: 'Invalid user' });

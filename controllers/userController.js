@@ -197,14 +197,50 @@ const rejectFriendRequest = async (req, res) => {
   }
 };
 
+const updateUserInfo = async (req, res) => {
+  const { name, age, gender } = req.body;
+  const userId = req.user._id;
+
+  if (!name && !age && !gender) {
+    return res.status(400).json({
+      message: "At least one field (name, age, gender) must be provided",
+    });
+  }
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    if (name) user.name = name;
+    if (age) user.age = age;
+    if (gender) user.gender = gender;
+
+    await user.save();
+    return res.status(200).json({
+      message: "User information updated",
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error updating user information",
+      error,
+    });
+  }
+};
 
 module.exports = {
-    register,
-    signIn,
-    searchUsers,
-    sendFriendRequest,
-    viewFriendRequests,
-    updateFriendRequestStatus,
-    acceptFriendRequest,
-    rejectFriendRequest 
+  register,
+  signIn,
+  searchUsers,
+  sendFriendRequest,
+  viewFriendRequests,
+  updateFriendRequestStatus,
+  acceptFriendRequest,
+  rejectFriendRequest,
+  updateUserInfo, 
 };
+

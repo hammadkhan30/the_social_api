@@ -2,10 +2,6 @@ const mongoose = require('mongoose');
 const Comment = require('./comment');
 
 const PostSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
   content: {
     type: String,
   },

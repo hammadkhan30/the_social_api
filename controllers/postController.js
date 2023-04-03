@@ -23,11 +23,10 @@ const createPost = async (req, res) => {
         post: newPost 
     });
   } catch (error) {
-    res.status(500).json({ 
-        message: 'Error creating post', 
-        error 
-    });
-  }
+    console.error('Error creating post:', error.message);
+    console.error(error.stack); 
+    res.status(500).json({ message: 'Error creating post', error });
+  }  
 };
 
 const editPost = async (req, res) => {
